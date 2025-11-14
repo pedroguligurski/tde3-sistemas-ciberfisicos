@@ -1,29 +1,26 @@
 Relatório — Jantar dos Filósofos
 
-O problema do Jantar dos Filósofos é uma forma de representar situações em que vários processos precisam usar os mesmos recursos ao mesmo tempo. 
-A ideia é imaginar cinco filósofos sentados em uma mesa redonda. Cada um passa um tempo pensando e, quando resolve comer, precisa pegar dois garfos: 
-o da esquerda e o da direita. O detalhe é que esses garfos são compartilhados, então dois filósofos sempre disputam o mesmo garfo.
+O Jantar dos Filósofos é um modelo clássico para explicar os problemas que acontecem quando vários processos tentam usar recursos compartilhados ao mesmo tempo. 
+No cenário, temos cinco filósofos sentados em volta de uma mesa. Cada um alterna entre pensar e comer, mas para comer precisa de dois garfos: 
+o da esquerda e o da direita. Como esses garfos são compartilhados, surgem riscos de travamento e injustiças no sistema.
 
-No protocolo mais simples, cada filósofo simplesmente tenta pegar um garfo primeiro e depois o outro. 
-Isso parece funcionar, mas leva a um problema sério: o impasse. 
-Esse impasse acontece quando todos pegam um garfo ao mesmo tempo e ficam esperando eternamente pelo outro. Como ninguém solta o garfo que já pegou, todo mundo fica travado e ninguém come. 
-É exatamente isso que chamamos de deadlock.
+No protocolo mais simples, cada filósofo tenta pegar primeiro um garfo e depois o outro. O problema é que isso pode gerar um impasse (deadlock): 
+todos pegam um garfo ao mesmo tempo e ficam esperando pelo segundo, que nunca fica livre. Ninguém solta o que pegou, então todos ficam travados para sempre.
 
-Esse tipo de travamento acontece quando quatro condições aparecem ao mesmo tempo. 
-Essas condições são conhecidas como Condições de Coffman, e servem justamente para explicar por que o sistema pode parar. Elas são:
+Existe também outro problema possível: a fome (inanição). Ela acontece quando um filósofo nunca consegue comer porque sempre chega alguém antes dele. 
+Mesmo que o sistema não trave completamente, um processo específico pode ficar eternamente esperando.
 
-  - Exclusão mútua: cada recurso só pode ser usado por uma pessoa por vez (um garfo não pode ser compartilhado).
-  - Manter e esperar: o processo segura o que já tem enquanto espera por outro recurso (o filósofo segura um garfo enquanto espera o outro).
-  - Não-preempção: o recurso não pode ser tomado à força, só quem está usando pode devolver (ninguém pode arrancar o garfo da mão do filósofo).
-  - Espera circular: existe um ciclo em que cada processo espera por um recurso que outro processo está segurando (um depende do outro em círculo).
+Para entender por que o impasse acontece, usamos as Condições de Coffman, que dizem que um deadlock só ocorre quando quatro condições se mantêm ao mesmo tempo: 
+exclusão mútua, manter-e-esperar, não-preempção e espera circular. O protocolo ingênuo atende às quatro condições, por isso pode travar.
 
-No protocolo ingênuo, essas quatro condições acontecem ao mesmo tempo, então o deadlock é possível.
+A solução adotada foi a estratégia da hierarquia de recursos. 
+Nela, cada garfo recebe um número, e todos os filósofos são obrigados a pegar sempre primeiro o garfo de menor número e só depois o garfo de maior número. Essa regra elimina a condição de espera circular, 
+porque impede que os filósofos fiquem esperando recursos em forma de ciclo. Sem ciclo, não há como o deadlock surgir.
 
-Para resolver isso, utilizei uma estratégia chamada hierarquia de recursos. 
-Ela é bem simples: cada garfo recebe um número, e todos os filósofos são obrigados a pegar sempre primeiro o garfo de menor número e só depois o de maior número. 
-Essa regra quebra a última condição, a espera circular, porque impede que se forme um ciclo de dependências entre os filósofos. Se não existe ciclo, não existe travamento.
+Além disso, esse protocolo também contribui para evitar a inanição, porque o acesso aos garfos segue uma ordem previsível e justa. Ninguém fica bloqueado para sempre, 
+pois a ordem de aquisição dos recursos impede que um filósofo seja sempre “furado” pelos outros.
 
-Essa solução garante que, mesmo que um filósofo tenha que esperar um pouco, em algum momento todos vão conseguir comer. O sistema deixa de travar e continua funcionando de forma justa para todos.
+Assim, a solução cumpre dois objetivos importantes: evita impasse e reduz o risco de fome, mantendo o sistema funcionando de forma correta e justa para todos.
 
 Pseudocódigo:
 

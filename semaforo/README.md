@@ -1,4 +1,6 @@
+## 1 Introdução
 
+O objetivo da atividade é demonstrar uma condição de corrida ao incrementar um contador compartilhado usando múltiplas threads sem qualquer forma de sincronização, e em seguida resolver esse problema utilizando um semáforo binário justo (Semaphore(1, true)), comparando os valores obtidos, tempo de execução e impactos no desempenho.
 
 ## 2 Metodologia
 
@@ -47,4 +49,14 @@ O valor é exato, pois o semáforo implementa exclusão mútua:
 
 As operações `release()` e `acquire()` criam uma relação de happens-before, garantindo visibilidade e ordem das atualizações do contador entre threads.
 
-O tempo elevado (18,702 s) reflete a forte serialização: embora existam várias threads, apenas uma atua na seção crítica de cada vez.
+O tempo 18,702s reflete a forte serialização: embora existam várias threads, apenas uma atua na seção crítica de cada vez.
+
+## 5 Conclusão
+
+A atividade demonstra claramente:
+
+- Sem sincronização, ocorre condição de corrida e o valor final do contador fica muito abaixo do esperado.
+- Com semáforo binário justo, todas as atualizações são preservadas e o valor final é correto (2 milhões).
+- A garantia de exclusão mútua e as regras de happens-before eliminam qualquer possibilidade de race condition.
+- Isso ocorre ao custo de um tempo de execução muito maior, pois as threads precisam aguardar sua vez para acessar a seção crítica.
+- A escolha entre performance e corretude depende do contexto, e semáforos são uma solução simples e segura para preservar integridade em regiões críticas.
